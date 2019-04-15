@@ -1,7 +1,5 @@
-from tkinter import *
 import socket
-
-root = Tk()
+from termcolor import colored
 
 
 def use_custom_ports(host, port):
@@ -44,4 +42,5 @@ def use_standard_ports():
             print(color_c + "Port -- ", i, " -- [OPEN]")
 
 
-root.mainloop()
+if __name__ == '__main__':
+    pass
