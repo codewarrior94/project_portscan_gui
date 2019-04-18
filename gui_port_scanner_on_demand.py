@@ -40,7 +40,3 @@ def use_standard_ports():
             print(color_b + "Port -- ", i, " -- [CLOSED]")
         else:
             print(color_c + "Port -- ", i, " -- [OPEN]")
-
-
-if __name__ == '__main__':
-    pass
