@@ -1,21 +1,28 @@
 from tkinter import *
-from tkinter import messagebox
 
 
-def show_message():
-    messagebox.showinfo("GUI Python", message.get())
+def change():
+    if var.get() == 0:
+        label['bg'] = 'red'
+    elif var.get() == 1:
+        label['bg'] = 'green'
+    elif var.get() == 2:
+        label['bg'] = 'blue'
 
 
 root = Tk()
-root.title("GUI на Python")
-root.geometry("300x250")
 
-message = StringVar()
-
-message_entry = Entry(textvariable=message)
-message_entry.place(relx=.5, rely=.1, anchor="c")
-
-message_button = Button(text="Click Me", command=show_message)
-message_button.place(relx=.5, rely=.5, anchor="c")
+var = IntVar()
+var.set(0)
+red = Radiobutton(text="Red", variable=var, value=0)
+green = Radiobutton(text="Green", variable=var, value=1)
+blue = Radiobutton(text="Blue", variable=var, value=2)
+button = Button(text="Изменить", command=change)
+label = Label(width=20, height=10)
+red.pack()
+green.pack()
+blue.pack()
+button.pack()
+label.pack()
 
 root.mainloop()
