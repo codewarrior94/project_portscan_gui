@@ -1,75 +1,96 @@
 import socket
-import sys
 import tkinter as tk
-from termcolor import colored
 
 
 # Function for scanning some standard ports from the list
 def use_standard_ports():
-    color_a = colored("[+] ", 'green')
-    color_b = colored("[!] ", 'red')
+    scan = socket.socket()
 
-    host = only_host_var.get()
-    print("\n")
-    port = [20, 21, 22, 23, 42, 43, 53, 67, 69, 80]
+    host = fs_hostname.get()
+    port = [20, 21, 22, 23, 42, 43, 53, 67, 69, 80, 443]
 
     for i in port:
         try:
-            scan = socket.socket()
             scan.settimeout(0.5)
             scan.connect((host, i))
         except socket.error:
-            print(color_b + "Port -- ", i, " -- [CLOSED]")
+            print(f"Port {i} -- [CLOSED]")
         else:
-            print(color_a + "Port -- ", i, " -- [OPEN]")
+            print(f"Port {i} -- [OPEN]")
 
 
 # Function for scanning custom port on users demand
 def use_custom_port():
-    scan = socket.socket()
-
-    host = host_var.get()
-    port = port_var.get()
-
-    color_a = colored("[+] ", 'green')
-    color_b = colored("[!] ", 'red')
+    host = ss_hostname.get()
+    port = ss_port_number.get()
 
     try:
+        scan = socket.socket()
         scan.settimeout(0.5)
         scan.connect((host, port))
     except socket.error:
-        print(color_b + "Port -- ", port, " -- [CLOSED]")
+        print("Port -- ", port, " -- [CLOSED]")
     else:
-        print(color_a + "Port -- ", port, " -- [OPEN]")
+        print("Port -- ", port, " -- [OPEN]")
 
 
 def do_selection():
     if rvar.get() == 0:
         fast_scan()
     elif rvar.get() == 1:
-        use_custom_port()
+        special_scan()
 
 
 def fast_scan():
     # Window settings
-    fs = tk.Toplevel()
-    fs.title("Fast Scan mode")
-    fs.geometry("180x100")
+    fs = tk.Toplevel(None)
+    fs.geometry("250x100+600+300")
     fs.resizable(width=False, height=False)
 
     # Widgets settings
-    hostname_var = tk.StringVar
-    host_entry = tk.Entry(fs, textvariable=hostname_var, width=22)
-    label_host_input = tk.Label(fs, text="Input required hostname:")
-    ok_btn = tk.Button(fs, text="Ok", command=fs.destroy, width=12)
-
-    # Widget place manage & special configurations
-    label_host_input.place(x=10, y=7)
+    host_entry = tk.Entry(fs, textvariable=fs_hostname, width=22)
+    host_entry.focus()
     host_entry.place(x=10, y=30)
+
+    label_host_input = tk.Label(fs, text="Input required hostname:")
+    label_host_input.place(x=10, y=7)
+
+    ok_btn = tk.Button(fs, text="Ok", command=fs.destroy, width=12)
     ok_btn.place(x=34, y=60)
 
-    fs.wait_window()
-    return hostname_var
+    fs.wait_window()  # Wait until window is closed
+    use_standard_ports()
+
+
+def special_scan():
+    # Window settings
+    ss = tk.Toplevel(None)
+    ss.geometry("180x100+600+300")
+    ss.resizable(width=False, height=False)
+    ss.config(bg="LightGrey")
+
+    # Widgets settings
+    label_host = tk.Label(ss, text="HOST:", font=('', 12))
+    label_host.place(x=5, y=5)
+    label_host.config(bg="LightGrey")
+
+    label_port = tk.Label(ss, text="PORT:", font=('', 12))
+    label_port.place(x=120, y=5)
+    label_port.config(bg="LightGrey")
+
+    entry_host = tk.Entry(ss, textvariable=ss_hostname, width=15)
+    entry_host.focus()
+    entry_host.place(x=7, y=35)
+
+    entry_port = tk.Entry(ss, textvariable=ss_port_number, width=7)
+    entry_port.place(x=123, y=35)
+
+    scan_btn = tk.Button(ss, text="Scan", width=22, command=ss.destroy)
+    scan_btn.place(x=7, y=65)
+    scan_btn.config(bg="LightGrey", font=('', 9))
+
+    ss.wait_window()  # Wait until window is closed
+    use_custom_port()
 
 
 ######################
@@ -77,31 +98,43 @@ def fast_scan():
 ######################
 
 # Window settings
-root = tk.Tk()
+root = tk.Tk(None)
 root.title("Simple PortSonar")
 root.geometry("300x200+520+250")
 root.resizable(width=False, height=False)
+root.config(bg="LightGrey")
 
-# Widget variables
+# Global variables
+fs_hostname = tk.StringVar()
+ss_hostname = tk.StringVar()
+ss_port_number = tk.IntVar()
+
+# Widgets variables
 rvar = tk.IntVar()
 rvar.set(0)
 
-# Button & Radiobutton section
+# Widgets settings
 fast_scan_rbtn = tk.Radiobutton(root, text="Fast Scan", variable=rvar, value=0)
+fast_scan_rbtn.place(x=10, y=35)
+fast_scan_rbtn.config(bg="LightGrey", font=('', 10))
+
 special_scan_rbtn = tk.Radiobutton(root, text="Special Scan", variable=rvar, value=1)
-scan_btn = tk.Button(root, text="Scan", command=do_selection, width=12)
+special_scan_rbtn.place(x=10, y=60)
+special_scan_rbtn.config(bg="LightGrey", font=('', 10))
+
+select_btn = tk.Button(root, text="Select", command=do_selection, width=12)
+select_btn.place(x=15, y=100)
+select_btn.config(bg="LightGrey", font=('', 10))
+
 exit_btn = tk.Button(root, text="Exit", command=root.quit, width=12)
+exit_btn.place(x=15, y=150)
+exit_btn.config(bg="LightGrey", font=('', 10))
 
-# Textbox, listbox etc. section
-output = tk.Text(root, width=19, height=10)
-scan_type_label = tk.Label(root, text="Choose scan type:")
-
-# Place manager & widget special configuration
-scan_type_label.place(x=10, y=10)
-fast_scan_rbtn.place(x=10, y=30)
-special_scan_rbtn.place(x=10, y=50)
-scan_btn.place(x=10, y=80)
-exit_btn.place(x=10, y=154)
+output = tk.Text(root, width=19, height=10, state='disabled')
 output.place(x=135, y=15)
+
+scan_type_label = tk.Label(root, text="Choose scan type:")
+scan_type_label.place(x=10, y=10)
+scan_type_label.config(bg="LightGrey", font=('', 10))
 
 root.mainloop()
