@@ -29,7 +29,7 @@ def fanc2():
 
     host = input(color_a + "Host --> ")
     print("\n")
-    port = [20, 21, 22, 23, 42, 43, 53, 67, 69, 80]
+    port = [20, 21, 22, 23, 42, 43, 53, 67, 69, 80, 443]
 
     for i in port:
         try:

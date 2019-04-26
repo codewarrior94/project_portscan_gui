@@ -7,16 +7,16 @@ def use_standard_ports():
     scan = socket.socket()
 
     host = fs_hostname.get()
-    port = [20, 21, 22, 23, 42, 43, 53, 67, 69, 80, 443]
-
+    port = [20, 21, 22, 23, 25, 53, 67, 68, 69, 80, 110, 123, 143, 443, 989, 990]
+    output.insert(tk.INSERT, f"[Host] --> {host}\n")
     for i in port:
         try:
             scan.settimeout(0.5)
             scan.connect((host, i))
         except socket.error:
-            print(f"Port {i} -- [CLOSED]")
+            output.insert(tk.INSERT, f"[Port] {i} --> [CLOSE]\n")
         else:
-            print(f"Port {i} -- [OPEN]")
+            output.insert(tk.INSERT, f"[Port] {i} --> [OPEN]\n")
 
 
 # Function for scanning custom port on users demand
@@ -29,9 +29,11 @@ def use_custom_port():
         scan.settimeout(0.5)
         scan.connect((host, port))
     except socket.error:
-        print("Port -- ", port, " -- [CLOSED]")
+        output.insert(tk.INSERT, f"[Host] --> {host}\n[Port] {port} --> [CLOSE]\n")
+        output.see(tk.END)
     else:
-        print("Port -- ", port, " -- [OPEN]")
+        output.insert(tk.INSERT, f"[Host] --> {host}\n[Port] {port} --> [OPEN]\n")
+        output.see(tk.END)
 
 
 def do_selection():
@@ -44,19 +46,22 @@ def do_selection():
 def fast_scan():
     # Window settings
     fs = tk.Toplevel(None)
-    fs.geometry("250x100+600+300")
+    fs.geometry("155x100+600+300")
     fs.resizable(width=False, height=False)
+    fs.config(bg="LightGrey")
 
     # Widgets settings
     host_entry = tk.Entry(fs, textvariable=fs_hostname, width=22)
     host_entry.focus()
-    host_entry.place(x=10, y=30)
+    host_entry.place(x=10, y=35)
 
-    label_host_input = tk.Label(fs, text="Input required hostname:")
+    label_host_input = tk.Label(fs, text="HOST:")
     label_host_input.place(x=10, y=7)
+    label_host_input.config(bg="LightGrey", font=('', 12))
 
-    ok_btn = tk.Button(fs, text="Ok", command=fs.destroy, width=12)
-    ok_btn.place(x=34, y=60)
+    scan_btn = tk.Button(fs, text="Scan", command=fs.destroy, width=18)
+    scan_btn.place(x=10, y=60)
+    scan_btn.config(bg="LightGrey", font=('', 9))
 
     fs.wait_window()  # Wait until window is closed
     use_standard_ports()
@@ -100,7 +105,7 @@ def special_scan():
 # Window settings
 root = tk.Tk(None)
 root.title("Simple PortSonar")
-root.geometry("300x200+520+250")
+root.geometry("380x228+520+250")
 root.resizable(width=False, height=False)
 root.config(bg="LightGrey")
 
@@ -126,15 +131,19 @@ select_btn = tk.Button(root, text="Select", command=do_selection, width=12)
 select_btn.place(x=15, y=100)
 select_btn.config(bg="LightGrey", font=('', 10))
 
-exit_btn = tk.Button(root, text="Exit", command=root.quit, width=12)
-exit_btn.place(x=15, y=150)
-exit_btn.config(bg="LightGrey", font=('', 10))
+clear_btn = tk.Button(root, text="Clear", command=lambda: output.delete('1.0', tk.END))
+clear_btn.place(x=15, y=135)
+clear_btn.config(bg="LightGrey", font=('', 10), width=12)
 
-output = tk.Text(root, width=19, height=10, state='disabled')
+exit_btn = tk.Button(root, text="Exit", command=root.quit)
+exit_btn.place(x=28, y=183)
+exit_btn.config(bg="LightGrey", font=('', 10),  width=9)
+
+output = tk.Text(root, width=29, height=12, state='normal')
 output.place(x=135, y=15)
 
 scan_type_label = tk.Label(root, text="Choose scan type:")
 scan_type_label.place(x=10, y=10)
 scan_type_label.config(bg="LightGrey", font=('', 10))
 
-root.mainloop()
+root.mainloop()  # Mainloop
