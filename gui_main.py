@@ -39,6 +39,7 @@ def use_custom_port():
 
 def do_selection():
     if rvar.get() == 0:
+        output.delete('1.0', tk.END)
         fast_scan()
     elif rvar.get() == 1:
         special_scan()
@@ -105,7 +106,7 @@ def special_scan():
 
 # Window settings
 root = tk.Tk(None)
-root.title("Simple PortSonar")
+root.title("Simple PortSonar 1.0")
 root.geometry("380x228+520+250")
 root.resizable(width=False, height=False)
 root.config(bg="LightGrey")
