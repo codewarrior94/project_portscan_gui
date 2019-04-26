@@ -4,14 +4,15 @@ import tkinter as tk
 
 # Function for scanning some standard ports from the list
 def use_standard_ports():
-    scan = socket.socket()
-
     host = fs_hostname.get()
     port = [20, 21, 22, 23, 25, 53, 67, 68, 69, 80, 110, 123, 143, 443, 989, 990]
+
     output.insert(tk.INSERT, f"[Host] --> {host}\n")
+
     for i in port:
         try:
-            scan.settimeout(0.5)
+            scan = socket.socket()
+            scan.settimeout(0.1)
             scan.connect((host, i))
         except socket.error:
             output.insert(tk.INSERT, f"[Port] {i} --> [CLOSE]\n")
