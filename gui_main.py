@@ -5,7 +5,8 @@ import tkinter as tk
 # Function for scanning some standard ports from the list
 def use_standard_ports():
     host = fs_hostname.get()
-    port = [20, 21, 22, 23, 25, 53, 67, 68, 69, 80, 110, 123, 143, 443, 989, 990]
+    port = [20, 21, 22, 23, 25, 53, 67, 68, 69,
+            80, 110, 123, 143, 443, 989, 990]
 
     output.insert(tk.INSERT, f"[Host] --> {host}\n")
 
@@ -30,10 +31,12 @@ def use_custom_port():
         scan.settimeout(0.5)
         scan.connect((host, port))
     except socket.error:
-        output.insert(tk.INSERT, f"[Host] --> {host}\n[Port] {port} --> [CLOSE]\n")
+        output.insert(tk.INSERT,
+                      f"[Host] --> {host}\n[Port] {port} --> [CLOSE]\n")
         output.see(tk.END)
     else:
-        output.insert(tk.INSERT, f"[Host] --> {host}\n[Port] {port} --> [OPEN]\n")
+        output.insert(tk.INSERT,
+                      f"[Host] --> {host}\n[Port] {port} --> [OPEN]\n")
         output.see(tk.END)
 
 
@@ -106,7 +109,7 @@ def special_scan():
 
 # Window settings
 root = tk.Tk(None)
-root.title("Simple PortSonar 1.0")
+root.title("Simple PortSonar 1.1")
 root.geometry("380x228+520+250")
 root.resizable(width=False, height=False)
 root.config(bg="LightGrey")
@@ -121,19 +124,23 @@ rvar = tk.IntVar()
 rvar.set(0)
 
 # Widgets settings
-fast_scan_rbtn = tk.Radiobutton(root, text="Fast Scan", variable=rvar, value=0)
+fast_scan_rbtn = tk.Radiobutton(root, text="Fast Scan",
+                                variable=rvar, value=0)
 fast_scan_rbtn.place(x=10, y=35)
 fast_scan_rbtn.config(bg="LightGrey", font=('', 10))
 
-special_scan_rbtn = tk.Radiobutton(root, text="Special Scan", variable=rvar, value=1)
+special_scan_rbtn = tk.Radiobutton(root, text="Special Scan",
+                                   variable=rvar, value=1)
 special_scan_rbtn.place(x=10, y=60)
 special_scan_rbtn.config(bg="LightGrey", font=('', 10))
 
-select_btn = tk.Button(root, text="Select", command=do_selection, width=12)
+select_btn = tk.Button(root, text="Select",
+                       command=do_selection, width=12)
 select_btn.place(x=15, y=100)
 select_btn.config(bg="LightGrey", font=('', 10))
 
-clear_btn = tk.Button(root, text="Clear", command=lambda: output.delete('1.0', tk.END))
+clear_btn = tk.Button(root, text="Clear",
+                      command=lambda: output.delete('1.0', tk.END))
 clear_btn.place(x=15, y=135)
 clear_btn.config(bg="LightGrey", font=('', 10), width=12)
 
